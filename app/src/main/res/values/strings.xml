@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Shop app</string>
+
+    <string name="home_tab">Home</string>
+    <string name="shopping_tab">Shopping</string>
     <string name="title">Lorem ipsum dolor sit, consectetur</string>
     <string name="title2">Lorem ipsum dolor sit amet, consectetur  adipiscin adipiscing elit.</string>
 </resources>

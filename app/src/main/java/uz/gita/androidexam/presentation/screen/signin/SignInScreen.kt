@@ -33,11 +33,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.hilt.getViewModel
 import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 import uz.gita.androidexam.R
 import uz.gita.androidexam.navigation.AppScreen
+import uz.gita.androidexam.presentation.screen.signup.SignUpContract
 import uz.gita.androidexam.ui.component.SignUpScreenComponent
 import uz.gita.androidexam.ui.theme.AndroidExamTheme
 import uz.gita.androidexam.ui.theme.Gray
+import uz.gita.androidexam.utils.logger
 
 class SignInScreen : AppScreen() {
     @Composable
@@ -48,6 +51,15 @@ class SignInScreen : AppScreen() {
         AndroidExamTheme {
             Surface(modifier = Modifier.fillMaxSize()) {
                 SignInScreenContent(uiState, viewModel::onEventDispatcher)
+            }
+        }
+
+        viewModel.collectSideEffect {
+            when (it) {
+                is SignInContract.SideEffect.HasError -> {
+                    logger("SignInScreen Error = " + it.message)
+                    // SnackBar yoki toast
+                }
             }
         }
     }
