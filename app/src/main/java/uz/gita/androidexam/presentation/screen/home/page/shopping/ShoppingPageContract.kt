@@ -1,9 +1,10 @@
-package uz.gita.androidexam.presentation.screen.home.page.home
+package uz.gita.androidexam.presentation.screen.home.page.shopping
 
 import org.orbitmvi.orbit.ContainerHost
 import uz.gita.androidexam.data.common.Products
 
-interface HomePageContract {
+interface ShoppingPageContract {
+
     interface ViewModel : ContainerHost<UIState, SideEffect> {
         fun onEventDispatcher(intent: Intent)
     }
@@ -18,6 +19,11 @@ interface HomePageContract {
     }
 
     sealed interface Intent {
-        object LoadData : Intent
+        data class LoadData(val userId: String) : Intent
+        object OpenAddProductScreen : Intent
+    }
+
+    interface Direction {
+        suspend fun navigateToAddProductScreen()
     }
 }

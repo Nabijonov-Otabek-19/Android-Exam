@@ -11,13 +11,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.*
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.hilt.getViewModel
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import org.orbitmvi.orbit.compose.*
 import uz.gita.androidexam.R
+import uz.gita.androidexam.ui.component.LoadingComponent
 import uz.gita.androidexam.ui.component.ProductsComponent
+import uz.gita.androidexam.ui.component.SearchView
 import uz.gita.androidexam.ui.theme.AndroidExamTheme
 import uz.gita.androidexam.utils.logger
 
@@ -103,27 +106,40 @@ fun HomePageContent(
     onEventDispatcher: (HomePageContract.Intent) -> Unit,
     modifier: Modifier
 ) {
+
+    val textState = remember { mutableStateOf(TextFieldValue("")) }
+
     Box(modifier = modifier.fillMaxSize()) {
         when (uiState.value) {
             HomePageContract.UIState.Loading -> {
-                //LoadingComponent()
+                LoadingComponent()
                 onEventDispatcher.invoke(HomePageContract.Intent.LoadData)
             }
 
             is HomePageContract.UIState.PrepareData -> {
                 val data = (uiState.value as HomePageContract.UIState.PrepareData).productsData
-                logger("HomePage = ${data.size}")
-                logger("Product List = ${data[0].productList.size}")
                 if (data.isEmpty()) {
                     Image(
-                        modifier = Modifier.size(50.dp),
+                        modifier = Modifier
+                            .size(150.dp)
+                            .align(Alignment.Center),
                         painter = painterResource(id = R.drawable.ic_empty),
                         contentDescription = null
                     )
                 } else {
                     LazyColumn {
+                        item {
+                            SearchView(
+                                state = textState,
+                                Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
+                            )
+                        }
+
                         items(data.size) {
-                            ProductsComponent(data[it])
+                            ProductsComponent(
+                                data[it],
+                                Modifier.padding(vertical = 4.dp, horizontal = 14.dp)
+                            )
                         }
                     }
                 }

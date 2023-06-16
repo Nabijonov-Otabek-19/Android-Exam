@@ -8,5 +8,6 @@ data class Product(
     val category: String = "",
     val name: String = "",
     val price: Int = 0,
-    val img: Int = R.drawable.ic_product
+    val img: Int = R.drawable.ic_product,
+    val userId : String = ""
 ): Serializable
