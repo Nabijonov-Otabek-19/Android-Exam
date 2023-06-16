@@ -9,8 +9,8 @@ class SignInDirection @Inject constructor(
     private val appNavigator: AppNavigator
 ) : SignInContract.Direction {
 
-    override suspend fun navigateToShopScreen() {
-        appNavigator.navigateTo(HomeScreen())
+    override suspend fun navigateToHomeScreen() {
+        appNavigator.replace(HomeScreen())
     }
 
     override suspend fun back() {

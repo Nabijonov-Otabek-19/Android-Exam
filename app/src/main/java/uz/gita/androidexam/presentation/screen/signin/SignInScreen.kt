@@ -126,7 +126,9 @@ fun SignInScreenContent(
                 .align(Alignment.BottomCenter),
             colors = ButtonDefaults.buttonColors(containerColor = Gray),
             onClick = {
-                onEventDispatcher.invoke(SignInContract.Intent.OpenShopScreen)
+                if (email.isNotEmpty() && password.isNotEmpty()) {
+                    onEventDispatcher.invoke(SignInContract.Intent.LogInUser(email, password))
+                }
             }
         ) {
             Text(text = "SIGN IN", fontSize = 16.sp)

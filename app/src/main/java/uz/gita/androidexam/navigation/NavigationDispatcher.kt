@@ -13,11 +13,10 @@ class NavigationDispatcher @Inject constructor() : AppNavigator, NavigationHandl
         navigationBuffer.emit(arg)
     }
 
-    override suspend fun navigateTo(screen: AppScreen) = navigate {
-        push(screen)
+    override suspend fun replace(screen: AppScreen) {
+        navigate { replace(screen) }
     }
 
-    override suspend fun back() = navigate {
-        pop()
-    }
+    override suspend fun navigateTo(screen: AppScreen) = navigate { push(screen) }
+    override suspend fun back() = navigate { pop() }
 }

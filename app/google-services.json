@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "340644174902",
+    "project_id": "shop-app-exam",
+    "storage_bucket": "shop-app-exam.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:340644174902:android:ac3259cb96fc34f4c60c97",
+        "android_client_info": {
+          "package_name": "uz.gita.androidexam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "340644174902-da2ni5dkleo73qvhev020m772vif6ejb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyH9n9dB5hOTxguYpfImdWpQLuBLbKW0k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "340644174902-da2ni5dkleo73qvhev020m772vif6ejb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -12,16 +12,16 @@ interface SignInContract {
     }
 
     sealed interface SideEffect {
-
+        data class HasError(val message: String) : SideEffect
     }
 
     sealed interface Intent {
-        object OpenShopScreen : Intent
+        data class LogInUser(val email: String, val password: String) : Intent
         object Back : Intent
     }
 
     interface Direction {
-        suspend fun navigateToShopScreen()
+        suspend fun navigateToHomeScreen()
         suspend fun back()
     }
 }

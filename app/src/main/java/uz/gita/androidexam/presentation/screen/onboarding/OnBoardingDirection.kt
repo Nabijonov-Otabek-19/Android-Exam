@@ -9,6 +9,6 @@ class OnBoardingDirection @Inject constructor(
 ) : OnBoardingContract.Direction {
 
     override suspend fun navigateToAccountScreen() {
-        navigator.navigateTo(AccountScreen())
+        navigator.replace(AccountScreen())
     }
 }

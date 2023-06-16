@@ -8,8 +8,8 @@ class SignUpDirection @Inject constructor(
     private val appNavigator: AppNavigator
 ) : SignUpContract.Direction {
 
-    override suspend fun navigateToShopScreen() {
-        appNavigator.navigateTo(HomeScreen())
+    override suspend fun navigateToHomeScreen() {
+        appNavigator.replace(HomeScreen())
     }
 
     override suspend fun back() {

@@ -11,10 +11,13 @@ import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 import uz.gita.androidexam.navigation.NavigationHandler
+import uz.gita.androidexam.presentation.screen.home.HomeScreen
 import uz.gita.androidexam.presentation.screen.onboarding.OnBoardingScreen
 import uz.gita.androidexam.ui.theme.AndroidExamTheme
+import uz.gita.androidexam.utils.Constants
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -31,7 +34,9 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Navigator(screen = OnBoardingScreen()) { navigator ->
+                    val screen = if (Constants.user != null) HomeScreen() else OnBoardingScreen()
+
+                    Navigator(screen = screen) { navigator ->
                         LaunchedEffect(key1 = navigator) {
                             navigationHandler.navigationBuffer.onEach {
                                 it(navigator)
