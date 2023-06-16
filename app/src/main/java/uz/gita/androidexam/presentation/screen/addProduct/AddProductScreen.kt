@@ -1,6 +1,7 @@
 package uz.gita.androidexam.presentation.screen.addProduct
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,10 +12,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,16 +31,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import cafe.adriel.voyager.hilt.getViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 import uz.gita.androidexam.R
 import uz.gita.androidexam.data.common.Product
 import uz.gita.androidexam.navigation.AppScreen
+import uz.gita.androidexam.ui.component.CategoryComponent
 import uz.gita.androidexam.ui.component.MyTextFieldComponent
 import uz.gita.androidexam.ui.theme.AndroidExamTheme
 import uz.gita.androidexam.ui.theme.Gray
@@ -89,8 +98,9 @@ fun TopBar(
     ) {
         Image(
             modifier = Modifier
-                .padding(horizontal = 16.dp),
-            painter = painterResource(id = R.drawable.ic_menu),
+                .padding(horizontal = 16.dp)
+                .clickable { onEventDispatcher.invoke(AddProductContract.Intent.Back) },
+            painter = painterResource(id = R.drawable.ic_back),
             contentDescription = null
         )
 
@@ -144,6 +154,36 @@ fun AddProductScreenContent(
                 keyboardOption = KeyboardOptions(keyboardType = KeyboardType.Number),
                 onValueChange = { size = it }
             )
+
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp)
+            ) {
+                Text(
+                    text = "Category",
+                    fontSize = 20.sp,
+                    color = Color.Black,
+                    modifier = Modifier
+                        .width(0.dp)
+                        .weight(1f)
+                )
+                IconButton(onClick = {
+
+                }) {
+                    Icon(Icons.Default.Add, contentDescription = null)
+                }
+            }
+
+            val data = (uiState.value as AddProductContract.UIState.LoadCategories).categoryList
+
+            LazyRow(modifier = Modifier.padding(horizontal = 8.dp)) {
+                items(data.size) {
+                    CategoryComponent(
+                        category = data[it],
+                        modifier = Modifier.padding(horizontal = 4.dp)
+                    )
+                }
+            }
         }
 
         Button(

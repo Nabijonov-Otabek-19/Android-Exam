@@ -69,4 +69,17 @@ class AppRepositoryImpl @Inject constructor() : AppRepository {
             }.addOnFailureListener { trySend(Result.failure(it)) }
         awaitClose()
     }
+
+    override fun fetchCategories(): Flow<Result<List<String>>> = callbackFlow {
+        firestore.collection("Products").get()
+            .addOnSuccessListener { query ->
+                val categoryList = arrayListOf<String>()
+                query.forEach { products ->
+                    val category = products.get("category").toString()
+                    categoryList.add(category)
+                    trySend(Result.success(categoryList))
+                }
+            }.addOnFailureListener { trySend(Result.failure(it)) }
+        awaitClose()
+    }
 }

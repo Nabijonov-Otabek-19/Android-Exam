@@ -10,6 +10,7 @@ interface AddProductContract {
 
     sealed interface UIState {
         object InitState : UIState
+        data class LoadCategories(val categoryList: List<String>) : UIState
     }
 
     sealed interface SideEffect {
