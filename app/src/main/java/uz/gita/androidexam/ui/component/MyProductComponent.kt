@@ -41,8 +41,10 @@ fun MyProductComponent(
             Column(
                 modifier = Modifier
                     .width(0.dp)
-                    .weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally
+                    .weight(1f)
+                    .align(Alignment.CenterVertically),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceEvenly
             ) {
                 Text(text = product.name, fontSize = 14.sp)
                 Text(text = "${product.price}$", fontSize = 12.sp)

@@ -16,7 +16,7 @@ import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 import uz.gita.androidexam.R
 import uz.gita.androidexam.navigation.AppScreen
-import uz.gita.androidexam.ui.component.SignUpScreenComponent
+import uz.gita.androidexam.ui.component.MyTextFieldComponent
 import uz.gita.androidexam.ui.theme.AndroidExamTheme
 import uz.gita.androidexam.ui.theme.Gray
 import uz.gita.androidexam.utils.logger
@@ -93,15 +93,15 @@ fun SignUpScreenContent(
         )
 
         Column(modifier = Modifier.align(Alignment.Center)) {
-            SignUpScreenComponent(
+            MyTextFieldComponent(
                 text = "Email",
                 placeholder = "example.user@gmail.com",
                 value = email,
-                keyboardOption = KeyboardOptions(keyboardType = KeyboardType.Text),
+                keyboardOption = KeyboardOptions(keyboardType = KeyboardType.Email),
                 onValueChange = { email = it }
             )
 
-            SignUpScreenComponent(
+            MyTextFieldComponent(
                 text = "Password",
                 placeholder = "email password",
                 value = password,

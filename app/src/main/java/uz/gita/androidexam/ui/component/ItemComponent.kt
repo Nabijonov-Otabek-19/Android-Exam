@@ -24,7 +24,7 @@ fun ItemComponent(
 ) {
 
     Card(elevation = CardDefaults.cardElevation(), modifier = modifier) {
-        Column {
+        Column(modifier = Modifier.padding(4.dp)) {
             Image(
                 modifier = Modifier.size(150.dp),
                 painter = painterResource(id = R.drawable.ic_product),

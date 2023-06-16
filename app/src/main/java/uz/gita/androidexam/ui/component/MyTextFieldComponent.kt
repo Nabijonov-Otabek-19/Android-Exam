@@ -19,7 +19,7 @@ import uz.gita.androidexam.ui.theme.Light_Blue
 
 
 @Composable
-fun SignUpScreenComponent(
+fun MyTextFieldComponent(
     text: String,
     modifier: Modifier = Modifier,
     placeholder: String,
@@ -82,7 +82,7 @@ fun SignUpScreenComponent(
 fun SignUpScreenComponentPreview() {
     var value by remember { mutableStateOf("") }
 
-    SignUpScreenComponent(
+    MyTextFieldComponent(
         "Email",
         modifier = Modifier, placeholder = "example.user@gmail.com", value = value,
         keyboardOption = KeyboardOptions(keyboardType = KeyboardType.Text)

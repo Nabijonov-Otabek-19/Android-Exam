@@ -93,7 +93,7 @@ fun TopBar(
             contentDescription = null
         )
 
-        Text(text = "My Products", color = Gray, textAlign = TextAlign.Center)
+        Text(text = "My Products", color = Gray, textAlign = TextAlign.Center, fontSize = 18.sp)
 
         Image(
             modifier = Modifier
@@ -141,19 +141,18 @@ fun ShoppingPageContent(
                             }
                         }
                     }
-
-                    Button(
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .padding(bottom = 8.dp)
-                            .width(250.dp)
-                            .height(65.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = Gray),
-                        onClick = {
-                            onEventDispatcher.invoke(ShoppingPageContract.Intent.OpenAddProductScreen)
-                        }) {
-                        Text(text = "ADD PRODUCT")
-                    }
+                }
+                Button(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 8.dp)
+                        .width(250.dp)
+                        .height(65.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = Gray),
+                    onClick = {
+                        onEventDispatcher.invoke(ShoppingPageContract.Intent.OpenAddProductScreen)
+                    }) {
+                    Text(text = "ADD PRODUCT")
                 }
             }
         }
