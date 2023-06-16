@@ -1,7 +1,9 @@
 package uz.gita.androidexam.presentation.screen.home.page.home
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
@@ -21,8 +23,8 @@ class HomePageViewModel @Inject constructor(
     override fun onEventDispatcher(intent: HomePageContract.Intent) {
         when (intent) {
             HomePageContract.Intent.LoadData -> {
-                intent { reduce { HomePageContract.UIState.Loading } }
                 appRepository.fetchAllProducts().onEach { result ->
+                    intent { reduce { HomePageContract.UIState.Loading } }
                     result.onSuccess {
                         intent { reduce { HomePageContract.UIState.PrepareData(it) } }
                     }
@@ -35,7 +37,7 @@ class HomePageViewModel @Inject constructor(
                             )
                         }
                     }
-                }
+                }.launchIn(viewModelScope)
             }
         }
     }

@@ -1,11 +1,12 @@
 package uz.gita.androidexam.data.common
 
 import uz.gita.androidexam.R
+import java.io.Serializable
 
 data class Product(
-    val id: Int,
-    val category: String,
-    val name: String,
-    val price: Int,
-    val img: String = R.drawable.ic_product.toString()
-)
+    val id: Int = 0,
+    val category: String = "",
+    val name: String = "",
+    val price: Int = 0,
+    val img: Int = R.drawable.ic_product
+): Serializable

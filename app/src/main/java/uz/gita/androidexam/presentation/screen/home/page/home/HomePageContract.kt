@@ -1,7 +1,7 @@
 package uz.gita.androidexam.presentation.screen.home.page.home
 
 import org.orbitmvi.orbit.ContainerHost
-import uz.gita.androidexam.data.common.ProductData
+import uz.gita.androidexam.data.common.Products
 
 interface HomePageContract {
     interface ViewModel : ContainerHost<UIState, SideEffect> {
@@ -10,7 +10,7 @@ interface HomePageContract {
 
     sealed interface UIState {
         object Loading : UIState
-        data class PrepareData(val productData: ProductData) : UIState
+        data class PrepareData(val productsData: List<Products>) : UIState
     }
 
     sealed interface SideEffect {

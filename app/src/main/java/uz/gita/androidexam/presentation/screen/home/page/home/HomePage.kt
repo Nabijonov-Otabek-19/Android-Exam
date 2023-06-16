@@ -1,28 +1,23 @@
 package uz.gita.androidexam.presentation.screen.home.page.home
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.*
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.hilt.getViewModel
 import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import org.orbitmvi.orbit.compose.*
 import uz.gita.androidexam.R
-import uz.gita.androidexam.ui.component.LoadingComponent
+import uz.gita.androidexam.ui.component.ProductsComponent
 import uz.gita.androidexam.ui.theme.AndroidExamTheme
 import uz.gita.androidexam.utils.logger
 
@@ -88,7 +83,7 @@ fun TopBar(
         Image(
             modifier = Modifier
                 .padding(horizontal = 16.dp),
-            painter = painterResource(id = R.drawable.ic_back),
+            painter = painterResource(id = R.drawable.ic_menu),
             contentDescription = null
         )
 
@@ -108,32 +103,27 @@ fun HomePageContent(
     onEventDispatcher: (HomePageContract.Intent) -> Unit,
     modifier: Modifier
 ) {
-    Surface(modifier = modifier.fillMaxSize()) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Green)
-        ) {
-            when (uiState.value) {
-                HomePageContract.UIState.Loading -> {
-                    LoadingComponent()
-                    onEventDispatcher.invoke(HomePageContract.Intent.LoadData)
-                }
+    Box(modifier = modifier.fillMaxSize()) {
+        when (uiState.value) {
+            HomePageContract.UIState.Loading -> {
+                //LoadingComponent()
+                onEventDispatcher.invoke(HomePageContract.Intent.LoadData)
+            }
 
-                is HomePageContract.UIState.PrepareData -> {
-                    val data = (uiState.value as HomePageContract.UIState.PrepareData).productData
-
-                    if (data.products.isEmpty()) {
-                        Image(
-                            modifier = Modifier.size(50.dp),
-                            painter = painterResource(id = R.drawable.ic_empty),
-                            contentDescription = null
-                        )
-                    } else {
-                        LazyColumn {
-                            items(data.products.size) {
-
-                            }
+            is HomePageContract.UIState.PrepareData -> {
+                val data = (uiState.value as HomePageContract.UIState.PrepareData).productsData
+                logger("HomePage = ${data.size}")
+                logger("Product List = ${data[0].productList.size}")
+                if (data.isEmpty()) {
+                    Image(
+                        modifier = Modifier.size(50.dp),
+                        painter = painterResource(id = R.drawable.ic_empty),
+                        contentDescription = null
+                    )
+                } else {
+                    LazyColumn {
+                        items(data.size) {
+                            ProductsComponent(data[it])
                         }
                     }
                 }
