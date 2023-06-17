@@ -9,13 +9,12 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
-import uz.gita.androidexam.domain.repository.AppRepository
-import uz.gita.androidexam.utils.logger
+import uz.gita.androidexam.domain.repository.impl.AppRepositoryImpl
 import javax.inject.Inject
 
 @HiltViewModel
 class HomePageViewModel @Inject constructor(
-    private val appRepository: AppRepository
+    private val appRepository: AppRepositoryImpl
 ) : HomePageContract.ViewModel, ViewModel() {
 
     override val container =

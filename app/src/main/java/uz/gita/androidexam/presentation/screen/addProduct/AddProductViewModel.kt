@@ -11,6 +11,7 @@ import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import uz.gita.androidexam.domain.repository.AppRepository
+import uz.gita.androidexam.utils.logger
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,14 +22,13 @@ class AddProductViewModel @Inject constructor(
 
     override val container =
         container<AddProductContract.UIState, AddProductContract.SideEffect>(
-            AddProductContract.UIState.LoadCategories(
-                arrayListOf()
-            )
+            AddProductContract.UIState.LoadCategories(arrayListOf())
         )
 
     init {
         appRepository.fetchCategories().onEach { result ->
             result.onSuccess {
+                logger("AddProductViewModel = $it")
                 intent { reduce { AddProductContract.UIState.LoadCategories(it) } }
             }
             result.onFailure {

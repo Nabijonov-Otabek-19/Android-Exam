@@ -11,6 +11,7 @@ import uz.gita.androidexam.data.common.Product
 import uz.gita.androidexam.data.common.Products
 import uz.gita.androidexam.domain.repository.AppRepository
 import uz.gita.androidexam.utils.Constants
+import uz.gita.androidexam.utils.logger
 import javax.inject.Inject
 
 class AppRepositoryImpl @Inject constructor() : AppRepository {
@@ -26,13 +27,13 @@ class AppRepositoryImpl @Inject constructor() : AppRepository {
                     products.reference.collection("productList").get()
                         .addOnSuccessListener { query ->
                             val itemList = arrayListOf<Product>()
-                            query.forEach { itemProduct -> itemList.add(itemProduct.toObject()) }
+                            query.forEach { itemProduct -> itemList.add(itemProduct.toObject() as Product) }
                             productList.add(Products(category, itemList))
+                            logger("fetchAllProducts ProducList = $$productList")
                             trySend(Result.success(productList))
                         }
                         .addOnFailureListener { trySend(Result.failure(it)) }
                 }
-
             }.addOnFailureListener { trySend(Result.failure(it)) }
         awaitClose()
     }
@@ -53,7 +54,6 @@ class AppRepositoryImpl @Inject constructor() : AppRepository {
                         }
                         .addOnFailureListener { trySend(Result.failure(it)) }
                 }
-
             }.addOnFailureListener { trySend(Result.failure(it)) }
         awaitClose()
     }
@@ -85,8 +85,8 @@ class AppRepositoryImpl @Inject constructor() : AppRepository {
                 query.forEach { products ->
                     val category = products.get("category").toString()
                     categoryList.add(category)
-                    trySend(Result.success(categoryList))
                 }
+                trySend(Result.success(categoryList))
             }.addOnFailureListener { trySend(Result.failure(it)) }
         awaitClose()
     }
