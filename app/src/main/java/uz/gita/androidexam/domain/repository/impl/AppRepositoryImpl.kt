@@ -11,7 +11,6 @@ import uz.gita.androidexam.data.common.Product
 import uz.gita.androidexam.data.common.Products
 import uz.gita.androidexam.domain.repository.AppRepository
 import uz.gita.androidexam.utils.Constants
-import uz.gita.androidexam.utils.logger
 import javax.inject.Inject
 
 class AppRepositoryImpl @Inject constructor() : AppRepository {
@@ -19,24 +18,6 @@ class AppRepositoryImpl @Inject constructor() : AppRepository {
     private val firestore = Firebase.firestore
 
     override fun fetchAllProducts(): Flow<Result<List<Products>>> = callbackFlow {
-        /*firestore.collection("Products").get()
-            .addOnSuccessListener { query ->
-                val productList = arrayListOf<Products>()
-                query.forEach { products ->
-                    val category = products.get("category").toString()
-                    products.reference.collection("productList").get()
-                        .addOnSuccessListener { query ->
-                            val itemList = arrayListOf<Product>()
-                            query.forEach { itemProduct -> itemList.add(itemProduct.toObject() as Product) }
-                            productList.add(Products(category, itemList))
-                            logger("fetchAllProducts ProducList = $$productList")
-                            trySend(Result.success(productList))
-                        }
-                        .addOnFailureListener { trySend(Result.failure(it)) }
-                }
-            }.addOnFailureListener { trySend(Result.failure(it)) }
-        awaitClose()*/
-
         val productListener = firestore.collection("Products")
             .addSnapshotListener { value, error ->
                 if (error != null) {
@@ -48,47 +29,26 @@ class AppRepositoryImpl @Inject constructor() : AppRepository {
                     val productList = arrayListOf<Products>()
                     value.forEach { products ->
                         val category = products.get("category").toString()
-
+                        val itemList = arrayListOf<Product>()
                         products.reference.collection("productList")
                             .addSnapshotListener { value, error ->
                                 if (error != null) {
                                     trySend(Result.failure(error))
                                 }
 
-                                if (value != null) {
-                                    val itemList = arrayListOf<Product>()
-                                    value.forEach { itemProduct ->
-                                        itemList.add(itemProduct.toObject())
-                                    }
-                                    productList.add(Products(category, itemList))
-                                    trySend(Result.success(productList))
+                                value?.forEach { itemProduct ->
+                                    itemList.add(itemProduct.toObject())
                                 }
                             }
+                        productList.add(Products(category, itemList))
                     }
+                    trySend(Result.success(productList))
                 }
             }
         awaitClose { productListener.remove() }
     }
 
     override fun fetchProductbyUserId(userId: String): Flow<Result<List<Products>>> = callbackFlow {
-        /*firestore.collection("Products").get()
-            .addOnSuccessListener { query ->
-                val productList = arrayListOf<Products>()
-                query.forEach { products ->
-                    val category = products.get("category").toString()
-                    products.reference.collection("productList")
-                        .whereEqualTo("userId", Constants.user?.email).get()
-                        .addOnSuccessListener { query ->
-                            val itemList = arrayListOf<Product>()
-                            query.forEach { itemProduct -> itemList.add(itemProduct.toObject()) }
-                            productList.add(Products(category, itemList))
-                            trySend(Result.success(productList))
-                        }
-                        .addOnFailureListener { trySend(Result.failure(it)) }
-                }
-            }.addOnFailureListener { trySend(Result.failure(it)) }
-        awaitClose()*/
-
         val productListener = firestore.collection("Products")
             .addSnapshotListener { value, error ->
                 if (error != null) {
@@ -116,8 +76,8 @@ class AppRepositoryImpl @Inject constructor() : AppRepository {
                                     productList.add(Products(category, itemList))
                                 }
                             }
-                        trySend(Result.success(productList))
                     }
+                    trySend(Result.success(productList))
                 }
             }
         awaitClose { productListener.remove() }

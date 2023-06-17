@@ -127,7 +127,7 @@ fun HomePageContent(
                         painter = painterResource(id = R.drawable.ic_empty),
                         contentDescription = null
                     )
-                } else if (data.isNotEmpty() && data[0].productList.isNotEmpty()) {
+                } else if (data[0].productList.isNotEmpty()) {
                     LazyColumn {
                         item {
                             SearchView(
