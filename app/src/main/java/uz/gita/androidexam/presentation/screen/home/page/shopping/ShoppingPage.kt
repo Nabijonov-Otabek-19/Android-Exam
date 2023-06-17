@@ -20,6 +20,7 @@ import cafe.adriel.voyager.navigator.tab.TabOptions
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 import uz.gita.androidexam.R
+import uz.gita.androidexam.data.common.Products
 import uz.gita.androidexam.ui.component.LoadingComponent
 import uz.gita.androidexam.ui.component.MyProductComponent
 import uz.gita.androidexam.ui.theme.AndroidExamTheme
@@ -113,6 +114,8 @@ fun ShoppingPageContent(
     modifier: Modifier
 ) {
 
+    val data = remember { mutableStateOf<List<Products>>(arrayListOf()) }
+
     Box(modifier = modifier.fillMaxSize()) {
         when (uiState.value) {
             ShoppingPageContract.UIState.Loading -> {
@@ -121,9 +124,9 @@ fun ShoppingPageContent(
             }
 
             is ShoppingPageContract.UIState.PrepareData -> {
-                val data = (uiState.value as ShoppingPageContract.UIState.PrepareData).productsData
-                logger("ShoppingPage = ${data.size}")
-                if (data.isEmpty() || data[0].productList.isEmpty()) {
+                data.value = (uiState.value as ShoppingPageContract.UIState.PrepareData).productsData
+                logger("ShoppingPage = ${data.value.size}")
+                if (data.value.isEmpty() || data.value[0].productList.isEmpty()) {
                     Image(
                         modifier = Modifier
                             .size(150.dp)
@@ -131,10 +134,9 @@ fun ShoppingPageContent(
                         painter = painterResource(id = R.drawable.ic_empty),
                         contentDescription = null
                     )
-                }
-                else {
+                } else {
                     LazyColumn {
-                        data.forEach { products ->
+                        data.value.forEach { products ->
                             items(products.productList.size) {
                                 MyProductComponent(
                                     product = products.productList[it],

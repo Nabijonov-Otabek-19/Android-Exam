@@ -131,6 +131,8 @@ fun AddProductScreenContent(
 
     var dialog by remember { mutableStateOf(false) }
 
+    val data = remember { mutableStateOf<List<String>>(arrayListOf()) }
+
     if (dialog) {
         DialogComponent(
             onDismiss = { dialog = false },
@@ -189,14 +191,14 @@ fun AddProductScreenContent(
                 }
             }
 
-            val data = (uiState.value as AddProductContract.UIState.LoadCategories).categoryList
+            data.value = (uiState.value as AddProductContract.UIState.LoadCategories).categoryList
 
             LazyRow(modifier = Modifier.padding(horizontal = 8.dp)) {
-                items(data.size) {
+                items(data.value.size) {
                     CategoryComponent(
-                        category = data[it],
+                        category = data.value[it],
                         modifier = Modifier.padding(horizontal = 4.dp),
-                        onClick = { category = data[it] }
+                        onClick = { category = data.value[it] }
                     )
                 }
             }

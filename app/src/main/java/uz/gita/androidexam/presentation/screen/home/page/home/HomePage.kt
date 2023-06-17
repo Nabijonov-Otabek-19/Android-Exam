@@ -18,6 +18,7 @@ import cafe.adriel.voyager.navigator.tab.Tab
 import cafe.adriel.voyager.navigator.tab.TabOptions
 import org.orbitmvi.orbit.compose.*
 import uz.gita.androidexam.R
+import uz.gita.androidexam.data.common.Products
 import uz.gita.androidexam.ui.component.LoadingComponent
 import uz.gita.androidexam.ui.component.ProductsComponent
 import uz.gita.androidexam.ui.component.SearchView
@@ -108,6 +109,7 @@ fun HomePageContent(
 ) {
 
     val textState = remember { mutableStateOf(TextFieldValue("")) }
+    val data = remember { mutableStateOf<List<Products>>(arrayListOf()) }
 
     Box(modifier = modifier.fillMaxSize()) {
         when (uiState.value) {
@@ -117,9 +119,9 @@ fun HomePageContent(
             }
 
             is HomePageContract.UIState.PrepareData -> {
-                val data = (uiState.value as HomePageContract.UIState.PrepareData).productsData
-                logger("HomePage = ${data.size}")
-                if (data.isEmpty() || data[0].productList.isEmpty()) {
+                data.value = (uiState.value as HomePageContract.UIState.PrepareData).productsData
+                logger("HomePage = ${data.value.size}")
+                if (data.value.isEmpty() || data.value[0].productList.isEmpty()) {
                     Image(
                         modifier = Modifier
                             .size(150.dp)
@@ -127,8 +129,7 @@ fun HomePageContent(
                         painter = painterResource(id = R.drawable.ic_empty),
                         contentDescription = null
                     )
-                }
-                else {
+                } else {
                     LazyColumn {
                         item {
                             SearchView(
@@ -137,9 +138,9 @@ fun HomePageContent(
                             )
                         }
 
-                        items(data.size) {
+                        items(data.value.size) {
                             ProductsComponent(
-                                data[it],
+                                data.value[it],
                                 Modifier.padding(vertical = 4.dp, horizontal = 14.dp)
                             )
                         }
