@@ -10,6 +10,7 @@ import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import uz.gita.androidexam.domain.repository.AppRepository
+import uz.gita.androidexam.utils.logger
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,13 +19,14 @@ class HomePageViewModel @Inject constructor(
 ) : HomePageContract.ViewModel, ViewModel() {
 
     override val container =
-        container<HomePageContract.UIState, HomePageContract.SideEffect>(HomePageContract.UIState.Loading)
+        container<HomePageContract.UIState, HomePageContract.SideEffect>(
+            HomePageContract.UIState.Loading
+        )
 
     override fun onEventDispatcher(intent: HomePageContract.Intent) {
         when (intent) {
             HomePageContract.Intent.LoadData -> {
                 appRepository.fetchAllProducts().onEach { result ->
-                    intent { reduce { HomePageContract.UIState.Loading } }
                     result.onSuccess {
                         intent { reduce { HomePageContract.UIState.PrepareData(it) } }
                     }

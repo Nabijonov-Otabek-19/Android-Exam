@@ -118,7 +118,8 @@ fun HomePageContent(
 
             is HomePageContract.UIState.PrepareData -> {
                 val data = (uiState.value as HomePageContract.UIState.PrepareData).productsData
-                if (data.isEmpty()) {
+                logger("HomePage = ${data.size}")
+                if (data.isEmpty() || data[0].productList.isEmpty()) {
                     Image(
                         modifier = Modifier
                             .size(150.dp)
@@ -126,7 +127,8 @@ fun HomePageContent(
                         painter = painterResource(id = R.drawable.ic_empty),
                         contentDescription = null
                     )
-                } else {
+                }
+                else {
                     LazyColumn {
                         item {
                             SearchView(

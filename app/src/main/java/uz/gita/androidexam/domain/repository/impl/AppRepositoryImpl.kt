@@ -6,6 +6,7 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import uz.gita.androidexam.data.common.CategoryData
 import uz.gita.androidexam.data.common.Product
 import uz.gita.androidexam.data.common.Products
 import uz.gita.androidexam.domain.repository.AppRepository
@@ -67,6 +68,13 @@ class AppRepositoryImpl @Inject constructor() : AppRepository {
                         .addOnFailureListener { trySend(Result.failure(it)) }
                 }
             }.addOnFailureListener { trySend(Result.failure(it)) }
+        awaitClose()
+    }
+
+    override fun addCategory(category: String): Flow<Result<Unit>> = callbackFlow {
+        firestore.collection("Products").add(CategoryData(category))
+            .addOnSuccessListener { trySend(Result.success(Unit)) }
+            .addOnFailureListener { trySend(Result.failure(it)) }
         awaitClose()
     }
 

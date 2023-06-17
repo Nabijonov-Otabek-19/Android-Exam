@@ -19,6 +19,7 @@ interface AddProductContract {
     }
 
     sealed interface Intent {
+        data class AddCategory(val category: String) : Intent
         data class AddProduct(val product: Product) : Intent
         object Back : Intent
     }

@@ -122,7 +122,8 @@ fun ShoppingPageContent(
 
             is ShoppingPageContract.UIState.PrepareData -> {
                 val data = (uiState.value as ShoppingPageContract.UIState.PrepareData).productsData
-                if (data[0].productList.isEmpty()) {
+                logger("ShoppingPage = ${data.size}")
+                if (data.isEmpty() || data[0].productList.isEmpty()) {
                     Image(
                         modifier = Modifier
                             .size(150.dp)
@@ -130,7 +131,8 @@ fun ShoppingPageContent(
                         painter = painterResource(id = R.drawable.ic_empty),
                         contentDescription = null
                     )
-                } else {
+                }
+                else {
                     LazyColumn {
                         data.forEach { products ->
                             items(products.productList.size) {
@@ -142,6 +144,7 @@ fun ShoppingPageContent(
                         }
                     }
                 }
+
                 Button(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)

@@ -65,6 +65,25 @@ class AddProductViewModel @Inject constructor(
                 }.launchIn(viewModelScope)
             }
 
+            is AddProductContract.Intent.AddCategory -> {
+                appRepository.addCategory(intent.category).onEach { result ->
+                    result.onSuccess {
+                        intent {
+                            postSideEffect(AddProductContract.SideEffect.Toast("Category saved"))
+                        }
+                    }
+                    result.onFailure {
+                        intent {
+                            postSideEffect(
+                                AddProductContract.SideEffect.HasError(
+                                    it.message ?: "Exception occured!"
+                                )
+                            )
+                        }
+                    }
+                }.launchIn(viewModelScope)
+            }
+
             AddProductContract.Intent.Back -> {
                 viewModelScope.launch {
                     direction.back()

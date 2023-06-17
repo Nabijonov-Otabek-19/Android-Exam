@@ -44,6 +44,7 @@ import uz.gita.androidexam.R
 import uz.gita.androidexam.data.common.Product
 import uz.gita.androidexam.navigation.AppScreen
 import uz.gita.androidexam.ui.component.CategoryComponent
+import uz.gita.androidexam.ui.component.DialogComponent
 import uz.gita.androidexam.ui.component.MyTextFieldComponent
 import uz.gita.androidexam.ui.theme.AndroidExamTheme
 import uz.gita.androidexam.ui.theme.Gray
@@ -104,7 +105,7 @@ fun TopBar(
             contentDescription = null
         )
 
-        Text(text = "My Products", color = Gray, textAlign = TextAlign.Center)
+        Text(text = "Add Product", color = Gray, textAlign = TextAlign.Center, fontSize = 20.sp)
 
         Image(
             modifier = Modifier
@@ -124,8 +125,24 @@ fun AddProductScreenContent(
 ) {
 
     var name by remember { mutableStateOf("") }
-    var price by remember { mutableStateOf("0") }
-    var size by remember { mutableStateOf("0") }
+    var price by remember { mutableStateOf("") }
+    var size by remember { mutableStateOf("") }
+    var category by remember { mutableStateOf("") }
+
+    var dialog by remember { mutableStateOf(false) }
+
+    if (dialog) {
+        DialogComponent(
+            onDismiss = { dialog = false },
+            value = category,
+            keyboardOption = KeyboardOptions(keyboardType = KeyboardType.Text),
+            onValueChange = {
+                category = it
+                onEventDispatcher.invoke(AddProductContract.Intent.AddCategory(category))
+                logger(category)
+            },
+        )
+    }
 
     Box(modifier = modifier.fillMaxSize()) {
 
@@ -141,7 +158,7 @@ fun AddProductScreenContent(
             // Price
             MyTextFieldComponent(
                 text = "Price",
-                placeholder = "Nike",
+                placeholder = "0$",
                 value = price,
                 keyboardOption = KeyboardOptions(keyboardType = KeyboardType.Number),
                 onValueChange = { price = it }
@@ -149,7 +166,7 @@ fun AddProductScreenContent(
             // Size
             MyTextFieldComponent(
                 text = "Size",
-                placeholder = "Nike",
+                placeholder = "7",
                 value = size,
                 keyboardOption = KeyboardOptions(keyboardType = KeyboardType.Number),
                 onValueChange = { size = it }
@@ -167,9 +184,7 @@ fun AddProductScreenContent(
                         .width(0.dp)
                         .weight(1f)
                 )
-                IconButton(onClick = {
-
-                }) {
+                IconButton(onClick = { dialog = true }) {
                     Icon(Icons.Default.Add, contentDescription = null)
                 }
             }
@@ -180,7 +195,8 @@ fun AddProductScreenContent(
                 items(data.size) {
                     CategoryComponent(
                         category = data[it],
-                        modifier = Modifier.padding(horizontal = 4.dp)
+                        modifier = Modifier.padding(horizontal = 4.dp),
+                        onClick = { category = data[it] }
                     )
                 }
             }
@@ -194,11 +210,13 @@ fun AddProductScreenContent(
                 .height(65.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Gray),
             onClick = {
-                if (name.isNotEmpty() && price.isNotEmpty() && size.isNotEmpty()) {
+                if (name.isNotEmpty() && price.isNotEmpty()
+                    && size.isNotEmpty() && category.isNotEmpty()
+                ) {
                     onEventDispatcher.invoke(
                         AddProductContract.Intent.AddProduct(
                             Product(
-                                category = "Airmax",
+                                category = category,
                                 price = price.toInt(),
                                 name = name,
                                 size = size.toLong(),

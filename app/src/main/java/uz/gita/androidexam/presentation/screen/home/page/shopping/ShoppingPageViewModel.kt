@@ -28,7 +28,6 @@ class ShoppingPageViewModel @Inject constructor(
         when (intent) {
             is ShoppingPageContract.Intent.LoadData -> {
                 appRepository.fetchProductbyUserId(intent.userId).onEach { result ->
-                    intent { reduce { ShoppingPageContract.UIState.Loading } }
                     result.onSuccess {
                         intent { reduce { ShoppingPageContract.UIState.PrepareData(it) } }
                     }
