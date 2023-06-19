@@ -7,6 +7,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import uz.gita.androidexam.domain.repository.AuthRepository
+import uz.gita.androidexam.utils.Constants
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor() : AuthRepository {
@@ -16,22 +17,22 @@ class AuthRepositoryImpl @Inject constructor() : AuthRepository {
     override fun signIn(email: String, password: String): Flow<Result<Unit>> = callbackFlow {
         auth.signInWithEmailAndPassword(email, password)
             .addOnSuccessListener {
-                //user = auth.currentUser
+                Constants.user = auth.currentUser
                 trySend(Result.success(Unit))
             }
             .addOnFailureListener { trySend(Result.failure(it)) }
             .addOnCanceledListener { trySend(Result.failure(Exception("Cancelled Operation"))) }
-        awaitClose { }
+        awaitClose()
     }
 
     override fun signUp(email: String, password: String): Flow<Result<Unit>> = callbackFlow {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnSuccessListener {
-                //user = auth.currentUser
+                Constants.user = auth.currentUser
                 trySend(Result.success(Unit))
             }
             .addOnFailureListener { trySend(Result.failure(it)) }
             .addOnCanceledListener { trySend(Result.failure(Exception("Cancelled Operation"))) }
-        awaitClose { }
+        awaitClose()
     }
 }
